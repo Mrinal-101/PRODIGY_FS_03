@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | ElectroLocal</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: #101728; color: #fff;}
+    .auth-box { max-width:390px; margin:80px auto; box-shadow:0 6px 32px #2227;
+      background:#242947; border-radius:16px; padding:30px 24px; }
+    .auth-box h2 { margin-top:0; }
+    .auth-box input { width:100%; padding:14px; margin:12px 0; border-radius:7px; border:none;}
+    .switch-link { color:#22d3ee; cursor:pointer; text-decoration:underline; margin-top:7px; display:block;}
+    .auth-box button { background:#22d3ee; color:#fff; border:none; border-radius:7px; font-size:1.1em;
+      padding:11px 0; width:100%; margin:20px 0; }
+    .msg { margin-top:18px; color:#eab308; text-align:center; font-size:.99em;}
+  </style>
+</head>
+<body>
+  <div class="auth-box">
+    <h2 id="form-title">Login</h2>
+    <form id="loginForm">
+      <input id="login-email" type="email" placeholder="Email" required>
+      <input id="login-pass" type="password" placeholder="Password" required minlength="4">
+      <button type="submit">Log In</button>
+    </form>
+    <form id="signupForm" style="display:none;">
+      <input id="signup-name" placeholder="Name" required>
+      <input id="signup-email" type="email" placeholder="Email" required>
+      <input id="signup-pass" type="password" placeholder="Password" required minlength="4">
+      <button type="submit">Sign Up</button>
+    </form>
+    <span class="switch-link" id="to-signup">Don't have an account? Sign up</span>
+    <span class="switch-link" id="to-login" style="display:none;">Already have an account? Log in</span>
+    <div class="msg" id="msg"></div>
+  </div>
+  <script src="auth.js"></script>
+  <script>
+    // Toggle forms
+    const msg = document.getElementById('msg');
+    document.getElementById('to-signup').onclick = () => {
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('signupForm').style.display = '';
+      document.getElementById('form-title').textContent = 'Sign Up';
+      msg.textContent = '';
+      document.getElementById('to-signup').style.display = 'none';
+      document.getElementById('to-login').style.display = '';
+    };
+    document.getElementById('to-login').onclick = () => {
+      document.getElementById('loginForm').style.display = '';
+      document.getElementById('signupForm').style.display = 'none';
+      document.getElementById('form-title').textContent = 'Login';
+      msg.textContent = '';
+      document.getElementById('to-signup').style.display = '';
+      document.getElementById('to-login').style.display = 'none';
+    };
+    // Handle login
+    document.getElementById('loginForm').onsubmit = e => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const pass  = document.getElementById('login-pass').value;
+      if(auth.login(email, pass)){
+        msg.textContent = "";
+        window.location = "index.html";
+      } else {
+        msg.textContent = "Invalid login. Try again.";
+      }
+    };
+    // Handle signup
+    document.getElementById('signupForm').onsubmit = e => {
+      e.preventDefault();
+      const name = document.getElementById('signup-name').value.trim();
+      const email= document.getElementById('signup-email').value.trim();
+      const pass = document.getElementById('signup-pass').value;
+      let ok = auth.signup(name, email, pass);
+      if(ok){
+        msg.textContent = "";
+        window.location = "index.html";
+      } else {
+        msg.textContent = "User already exists.";
+      }
+    };
+  </script>
+</body>
+</html>
